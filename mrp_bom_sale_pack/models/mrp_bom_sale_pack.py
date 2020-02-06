@@ -32,10 +32,11 @@ class SaleOrderLine(models.Model):
             v_stock = []
             r_stock = []
             for oline in line.mrp_boms:
-                v_stock.append(oline.bom_line.product_id.virtual_available /
-                               (oline.product_uom_qty))
-                r_stock.append(oline.bom_line.product_id.qty_available /
-                               (oline.product_uom_qty))
+                if oline.product_uom_qty:
+                    v_stock.append(oline.bom_line.product_id.virtual_available /
+                                   (oline.product_uom_qty))
+                    r_stock.append(oline.bom_line.product_id.qty_available /
+                                   (oline.product_uom_qty))
             line.virtual_stock = min(v_stock or [0])
             line.real_stock = min(r_stock or [0])
 
